@@ -1,23 +1,24 @@
-# EX 4E Longest Increasing Subsequence – Dynamic Programming
+# EX 4D Longest Common SubSequence - Dynamic Programming
 
-## DATE: 20-11-2025
+## DATE: 14-11-2025
 
 ## AIM:
 
-To write a Java program to compute the length of the **Longest Increasing Subsequence (LIS)** in a given integer array using **Dynamic Programming**.
+To write a Java program to find the length of the **Longest Common Subsequence (LCS)** between two given strings using **Dynamic Programming**.
 
 ---
 
 ## Algorithm:
 
-1. Read the array size `n` and the array elements.
-2. Create a DP array `dp[]` of size `n`, initialized with 1 (each number is an LIS of length 1).
-3. For each index `i` from 1 to n−1:
+1. Read the two input strings `text1` and `text2`.
+2. Create a 2D DP matrix `dp[m+1][n+1]` where `m` and `n` are the lengths of the strings.
+3. Fill the DP table from bottom-right to top-left:
 
-   * Check previous elements `j` from 0 to i−1.
-   * If `nums[i] > nums[j]`, update
-     `dp[i] = max(dp[i], dp[j] + 1)`
-4. Find the maximum value in the DP array — this is the LIS length.
+   * If characters match:
+     `dp[i][j] = 1 + dp[i+1][j+1]`
+   * Else:
+     `dp[i][j] = max(dp[i+1][j], dp[i][j+1])`
+4. The value at `dp[0][0]` gives the length of the LCS.
 5. Print the result.
 
 ---
@@ -31,41 +32,35 @@ Developed by: MASINA SREE KARSH
 Register Number: 212223100033
 */
 
-import java.util.*;
+import java.util.Scanner;
 
-public class LongestIncreasingSubsequence {
-    public static int lengthOfLIS(int[] nums) {
-        int[] dp = new int[nums.length];
-        Arrays.fill(dp, 1);
+public class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dpGrid = new int[text1.length() + 1][text2.length() + 1];
 
-        for (int i = 1; i < nums.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[i] > nums[j]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
+        for (int col = text2.length() - 1; col >= 0; col--) {
+            for (int row = text1.length() - 1; row >= 0; row--) {
+                if (text1.charAt(row) == text2.charAt(col)) {
+                    dpGrid[row][col] = 1 + dpGrid[row + 1][col + 1];
+                } else {
+                    dpGrid[row][col] = Math.max(dpGrid[row + 1][col], dpGrid[row][col + 1]);
                 }
             }
         }
-
-        int longest = 0;
-        for (int c : dp) {
-            longest = Math.max(longest, c);
-        }
-        return longest;
+        return dpGrid[0][0];
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int[] nums = new int[n];
+        Scanner sc = new Scanner(System.in);
+        Solution sol = new Solution();
 
-        for (int i = 0; i < n; i++) {
-            nums[i] = scanner.nextInt();
-        }
+        String text1 = sc.nextLine().replaceAll("\"", "");
+        String text2 = sc.nextLine().replaceAll("\"", "");
 
-        int result = lengthOfLIS(nums);
-        System.out.println("Length of Longest Increasing Subsequence: " + result);
+        int lcsLength = sol.longestCommonSubsequence(text1, text2);
+        System.out.println("Length of Longest Common Subsequence: " + lcsLength);
 
-        scanner.close();
+        sc.close();
     }
 }
 ```
@@ -74,14 +69,10 @@ public class LongestIncreasingSubsequence {
 
 ## Output:
 
-<img width="1203" height="282" alt="image" src="https://github.com/user-attachments/assets/84789017-ea66-4602-b337-e272c483b622" />
+<img width="1152" height="297" alt="image" src="https://github.com/user-attachments/assets/43c9f0ba-d6fe-4de2-9777-310b89646bd1" />
 
 ---
 
 ## Result:
 
 The program was successfully implemented using Dynamic Programming and the expected output was verified.
-
----
-
-If you want **EX 5A, 5B, 5C** also prepared, just tell me!
